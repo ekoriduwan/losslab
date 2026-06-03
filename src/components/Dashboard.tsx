@@ -1,4 +1,3 @@
-import React from 'react';
 import { AlertTriangle, BrainCircuit } from 'lucide-react';
 import { motion } from 'framer-motion';
 

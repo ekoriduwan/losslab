@@ -1,8 +1,8 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { LayoutDashboard, Factory, ActivitySquare, BrainCircuit, HelpCircle, TerminalSquare, Search, Bell, Settings } from 'lucide-react';
 
 interface LayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
