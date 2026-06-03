@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Factory, ActivitySquare, BrainCircuit, HelpCircle, TerminalSquare, Search, Bell, Settings, Plus } from 'lucide-react';
+import { LayoutDashboard, Factory, ActivitySquare, BrainCircuit, HelpCircle, TerminalSquare, Search, Bell, Settings, Plus, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface LayoutProps {
@@ -12,6 +12,7 @@ const navItems = [
   { to: '/assets', icon: Factory, label: 'Assets' },
   { to: '/simulator', icon: ActivitySquare, label: 'Simulator' },
   { to: '/ai-insights', icon: BrainCircuit, label: 'AI Insights' },
+  { to: '/gamification', icon: Trophy, label: 'Leaderboard' },
 ];
 
 const pageTitles: Record<string, string> = {
@@ -19,6 +20,7 @@ const pageTitles: Record<string, string> = {
   '/assets': 'Assets',
   '/simulator': 'Simulator',
   '/ai-insights': 'AI Recommendation',
+  '/gamification': 'Gamification & Leaderboard',
 };
 
 export default function Layout({ children }: LayoutProps) {
