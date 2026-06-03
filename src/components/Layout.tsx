@@ -1,96 +1,146 @@
 import type { ReactNode } from 'react';
-import { LayoutDashboard, Factory, ActivitySquare, BrainCircuit, HelpCircle, TerminalSquare, Search, Bell, Settings } from 'lucide-react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { LayoutDashboard, Factory, ActivitySquare, BrainCircuit, HelpCircle, TerminalSquare, Search, Bell, Settings, Plus } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
+const navItems = [
+  { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/assets', icon: Factory, label: 'Assets' },
+  { to: '/simulator', icon: ActivitySquare, label: 'Simulator' },
+  { to: '/ai-insights', icon: BrainCircuit, label: 'AI Insights' },
+];
+
+const pageTitles: Record<string, string> = {
+  '/': 'Overview',
+  '/assets': 'Assets',
+  '/simulator': 'Simulator',
+  '/ai-insights': 'AI Recommendation',
+};
+
 export default function Layout({ children }: LayoutProps) {
+  const location = useLocation();
+  const pageTitle = pageTitles[location.pathname] || 'LOSSLAB';
+
   return (
     <div className="bg-background text-on-surface font-body-md overflow-hidden h-screen flex">
-      {/* SideNavBar Anchor */}
-      <aside className="hidden md:flex flex-col h-full py-lg w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant z-40 transition-all duration-300">
+      {/* SideNavBar */}
+      <aside className="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant py-lg z-50">
         <div className="px-lg mb-xl">
-          <h1 className="font-headline-md text-headline-md font-black tracking-tight text-on-background">LOSSLAB</h1>
-          <p className="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mt-1">Industrial Precision</p>
-        </div>
-        <nav className="flex-1 px-md space-y-1">
-          <a className="flex items-center gap-md px-md py-sm rounded text-primary font-bold bg-surface-container-highest transition-all duration-75" href="#">
-            <LayoutDashboard size={20} />
-            <span className="font-label-md text-label-md">Dashboard</span>
-          </a>
-          <a className="flex items-center gap-md px-md py-sm rounded text-on-surface-variant hover:bg-surface-container transition-all" href="#">
-            <Factory size={20} />
-            <span className="font-label-md text-label-md">Assets</span>
-          </a>
-          <a className="flex items-center gap-md px-md py-sm rounded text-on-surface-variant hover:bg-surface-container transition-all" href="#">
-            <ActivitySquare size={20} />
-            <span className="font-label-md text-label-md">Simulator</span>
-          </a>
-          <a className="flex items-center gap-md px-md py-sm rounded text-on-surface-variant hover:bg-surface-container transition-all" href="#">
-            <BrainCircuit size={20} />
-            <span className="font-label-md text-label-md">AI Insights</span>
-          </a>
-          <div className="pt-lg pb-base">
-            <button className="w-full bg-primary text-on-primary py-sm px-md rounded-lg font-label-md text-label-md hover:brightness-110 active:scale-95 transition-all">
-              New Scenario
-            </button>
+          <div className="flex items-center gap-sm">
+            <div className="w-8 h-8 bg-primary rounded flex items-center justify-center text-white">
+              <ActivitySquare size={18} />
+            </div>
+            <div>
+              <h1 className="font-headline-md text-headline-md font-black tracking-tight text-on-background">LOSSLAB</h1>
+              <p className="font-label-md text-label-md text-on-surface-variant opacity-70">Industrial Precision</p>
+            </div>
           </div>
+        </div>
+
+        <nav className="flex-1 px-sm space-y-1">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                `flex items-center gap-md px-md py-sm rounded-lg transition-all active:scale-95 duration-75 ${
+                  isActive
+                    ? 'text-primary font-bold bg-surface-container-highest'
+                    : 'text-on-surface-variant hover:bg-surface-container'
+                }`
+              }
+            >
+              <item.icon size={20} />
+              <span className="font-label-md text-label-md">{item.label}</span>
+            </NavLink>
+          ))}
         </nav>
-        <footer className="px-md mt-auto pt-lg border-t border-outline-variant/30 space-y-1">
-          <a className="flex items-center gap-md px-md py-sm rounded text-on-surface-variant hover:bg-surface-container" href="#">
+
+        <div className="px-sm pt-md mt-auto border-t border-outline-variant/30">
+          <button className="w-full flex items-center justify-center gap-sm bg-primary text-white font-label-md py-sm rounded-lg hover:brightness-110 active:scale-95 transition-all mb-lg">
+            <Plus size={16} />
+            New Scenario
+          </button>
+          <a className="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-all" href="#">
             <HelpCircle size={20} />
             <span className="font-label-md text-label-md">Support</span>
           </a>
-          <a className="flex items-center gap-md px-md py-sm rounded text-on-surface-variant hover:bg-surface-container" href="#">
+          <a className="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-all" href="#">
             <TerminalSquare size={20} />
             <span className="font-label-md text-label-md">Logs</span>
           </a>
-        </footer>
+        </div>
       </aside>
 
       <main className="flex-1 md:ml-64 flex flex-col h-screen overflow-hidden">
-        {/* TopAppBar Anchor */}
-        <header className="flex justify-between items-center px-lg w-full sticky top-0 z-50 h-16 bg-surface border-b border-outline-variant">
+        {/* TopAppBar */}
+        <header className="flex justify-between items-center px-lg w-full sticky top-0 z-40 bg-surface border-b border-outline-variant h-16">
           <div className="flex items-center gap-md">
-            <h2 className="font-headline-md text-headline-md font-bold text-primary">Overview</h2>
-            <div className="hidden lg:flex items-center gap-sm ml-xl border-l border-outline-variant pl-xl">
-              <span className="text-on-surface-variant font-label-md text-label-md">Region:</span>
-              <select className="bg-transparent border-none text-on-surface font-label-md text-label-md focus:ring-0 p-0 cursor-pointer">
-                <option>Central Grid Alpha</option>
-                <option>Sector 7-G</option>
-              </select>
-            </div>
+            <h2 className="font-headline-md text-headline-md font-bold text-primary">{pageTitle}</h2>
           </div>
-          <div className="flex items-center gap-xl">
+          <div className="flex items-center gap-lg">
             <div className="relative hidden sm:block">
-              <input className="bg-surface-container-low border border-outline-variant rounded-full px-lg py-base text-body-md w-64 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Search parameters..." type="text" />
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant" size={18} />
+              <input
+                className="bg-surface-container-low border border-outline-variant rounded-full px-xl py-base text-body-md focus:outline-none focus:ring-1 focus:ring-primary w-64"
+                placeholder="Search parameters..."
+                type="text"
+              />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-outline" size={18} />
             </div>
-            <div className="flex items-center gap-md">
-              <button className="bg-primary text-on-primary font-label-md text-label-md px-lg py-base rounded hover:brightness-110 transition-colors">
-                Run Simulation
-              </button>
-              <button className="p-base text-on-surface-variant hover:bg-surface-container-highest rounded transition-colors">
+            <button className="bg-primary text-on-primary px-lg py-base rounded-lg font-label-md hover:brightness-110 transition-all active:scale-95">
+              Run Simulation
+            </button>
+            <div className="flex items-center gap-sm border-l border-outline-variant pl-md">
+              <button className="p-1 text-on-surface-variant hover:bg-surface-container rounded transition-colors">
                 <Bell size={20} />
               </button>
-              <button className="p-base text-on-surface-variant hover:bg-surface-container-highest rounded transition-colors">
+              <button className="p-1 text-on-surface-variant hover:bg-surface-container rounded transition-colors">
                 <Settings size={20} />
               </button>
-              <div className="w-8 h-8 rounded-full border border-outline-variant ml-base bg-secondary overflow-hidden">
-                <img alt="User profile" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" />
+              <div className="w-8 h-8 rounded-full border border-outline-variant bg-primary-container overflow-hidden flex items-center justify-center text-on-primary-container font-bold text-sm">
+                EK
               </div>
             </div>
           </div>
         </header>
 
-        {/* Main Dashboard Canvas */}
-        <div className="flex-1 overflow-y-auto p-lg bg-surface-bright">
-          <div className="max-w-[1600px] mx-auto space-y-lg">
-            {children}
+        {/* Main Content */}
+        <div className="flex-1 overflow-y-auto p-lg bg-background">
+          <div className="max-w-[1600px] mx-auto">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={location.pathname}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+              >
+                {children}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </main>
+
+      {/* Mobile Bottom Nav */}
+      <nav className="md:hidden fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant flex justify-around items-center py-base z-50">
+        {navItems.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            className={({ isActive }) =>
+              `flex flex-col items-center p-sm ${isActive ? 'text-primary' : 'text-on-surface-variant'}`
+            }
+          >
+            <item.icon size={20} />
+            <span className="text-[10px] font-label-md">{item.label}</span>
+          </NavLink>
+        ))}
+      </nav>
     </div>
   );
 }
